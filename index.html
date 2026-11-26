@@ -93,7 +93,7 @@ button{font-family:var(--font);color:var(--ink)}
 .stars{font-size:38px;letter-spacing:4px;margin:0 0 4px;color:#D9C9A8;-webkit-text-stroke:2px var(--ink)}
 .stars i{font-style:normal;color:#FFD84A}
 .tip{font-size:12px!important;color:#7A5E44}
-.ver{position:absolute;right:10px;bottom:8px;font-size:10px;font-weight:800;background:rgba(255,246,226,.9);border:2px solid var(--ink);border-radius:9px;padding:1px 7px}
+.ver{position:absolute;left:10px;bottom:8px;font-size:10px;font-weight:800;background:rgba(255,246,226,.9);border:2px solid var(--ink);border-radius:9px;padding:1px 7px}
 #saver{z-index:10}#gallery{z-index:9}
 .card.wide{width:min(100%,350px);max-height:94%;overflow:auto}
 .shot{border:2px solid var(--ink);border-radius:14px;margin:0 0 10px;overflow:hidden;background:#fff repeating-conic-gradient(#EDE3CF 0 25%,#fff 0 50%) 0 0/18px 18px}
@@ -104,7 +104,7 @@ button{font-family:var(--font);color:var(--ink)}
 .ggrid img{width:100%;aspect-ratio:1;object-fit:contain;pointer-events:none}
 .ggrid span{background:var(--cream);border-radius:6px;padding:0 4px;line-height:1.4}
 #svtip.on{color:var(--tomato);animation:pop .4s}
-#plan{pointer-events:none;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px 10px;gap:6px}
+#plan{pointer-events:none;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 44px);gap:6px}
 #plan>*{pointer-events:auto}#plan .pnote,#plan .pcd{pointer-events:none}
 .phead{display:flex;align-items:center;gap:8px;width:100%;padding-right:52px}
 .phead .outline{font-size:30px;-webkit-text-stroke-width:7px;letter-spacing:.08em}
@@ -132,6 +132,9 @@ button{font-family:var(--font);color:var(--ink)}
 .pbody .row2 span{grid-column:2/4;font-size:11.5px;color:#6A5038;line-height:1.4}
 .pbody .grp{font-size:12px;font-weight:900;background:var(--ink);color:var(--cream);border-radius:8px;padding:1px 8px;margin:8px 0 2px;display:inline-block}
 .pbody .grp:first-child{margin-top:0}
+.thanks{position:absolute;right:8px;bottom:calc(env(safe-area-inset-bottom) + 6px);z-index:8;font-size:10px;font-weight:800;color:var(--ink);text-decoration:none;background:rgba(255,246,226,.92);border:2px solid var(--ink);border-radius:9px;padding:2px 7px;line-height:1.3;text-align:center}
+.thanks small{display:block;font-size:8px;font-weight:500;letter-spacing:.08em}
+.thanks:focus-visible{outline:3px solid var(--green);outline-offset:2px}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes pulse{to{transform:scale(1.04)}}
 @media (prefers-reduced-motion:reduce){.card,#intro .bison,#wave.hot{animation:none}}
@@ -154,13 +157,14 @@ button{font-family:var(--font);color:var(--ink)}
   <div id="mis"><b>1</b><span id="mist">草を刈ろう</span><em id="misn"></em></div>
 </div>
 <button class="round hint" id="snd" aria-label="音のオンオフ"><svg class="off" viewBox="0 0 24 24" fill="#3A2A1E" stroke="#3A2A1E" stroke-width="2" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6" fill="none" stroke-linecap="round"/></svg><svg class="on" viewBox="0 0 24 24" fill="#3A2A1E" stroke="#3A2A1E" stroke-width="2" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke-linecap="round"/></svg></button>
+<a class="thanks" id="thanks" href="https://youtube.com/channel/UCatAxipHf7hSqzCWNhbGBEg" target="_blank" rel="noopener"><small>SPECIAL THANKS</small>@ぼでぃそーぷ</a>
 <div id="toast"></div>
 <div id="banner"><div class="b"><span class="outline" id="bant"></span><small id="bans"></small></div></div>
 
 <div class="layer" id="title">
   <div class="logo"><span class="outline">わらびーの</span><br><b class="outline">草刈りバイソン</b></div>
   <div class="btns"><button class="btn" id="start">はじめる</button></div>
-  <div class="ver">Ver.7.2</div>
+  <div class="ver">Ver.7.3</div>
 </div>
 
 <div class="layer" id="intro" hidden>
