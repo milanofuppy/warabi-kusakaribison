@@ -104,13 +104,13 @@ button{font-family:var(--font);color:var(--ink)}
 .ggrid img{width:100%;aspect-ratio:1;object-fit:contain;pointer-events:none}
 .ggrid span{background:var(--cream);border-radius:6px;padding:0 4px;line-height:1.4}
 #svtip.on{color:var(--tomato);animation:pop .4s}
-#plan{pointer-events:none;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 44px);gap:6px}
+#plan{pointer-events:none;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px 10px;gap:6px}
 #plan>*{pointer-events:auto}#plan .pnote,#plan .pcd{pointer-events:none}
 .phead{display:flex;align-items:center;gap:8px;width:100%;padding-right:52px}
 .phead .outline{font-size:30px;-webkit-text-stroke-width:7px;letter-spacing:.08em}
 .ptime{margin-left:auto;background:var(--cream);border:3px solid var(--ink);border-radius:999px;box-shadow:0 3px 0 var(--ink);padding:2px 12px;font-weight:900;font-size:18px;font-variant-numeric:tabular-nums}
 .ptime.hot{background:var(--tomato);color:var(--cream);animation:pulse .5s ease-in-out infinite alternate}
-.pnote{font-size:11px;font-weight:800;background:rgba(255,246,226,.92);border:2px solid var(--ink);border-radius:999px;padding:1px 10px}
+.pnote{align-self:flex-start;font-size:11px;font-weight:800;background:rgba(255,246,226,.92);border:2px solid var(--ink);border-radius:999px;padding:1px 10px}
 .pcd{position:absolute;left:0;right:0;top:30%;text-align:center;font-weight:900;font-size:120px;line-height:1;color:var(--cream);-webkit-text-stroke:12px var(--ink);paint-order:stroke fill}
 .pcd.go{animation:cdn 1s ease-out forwards}
 @keyframes cdn{0%{transform:scale(1.8);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{opacity:0;transform:scale(.9)}}
@@ -133,6 +133,8 @@ button{font-family:var(--font);color:var(--ink)}
 .pbody .grp{font-size:12px;font-weight:900;background:var(--ink);color:var(--cream);border-radius:8px;padding:1px 8px;margin:8px 0 2px;display:inline-block}
 .pbody .grp:first-child{margin-top:0}
 .thanks{position:absolute;right:8px;bottom:calc(env(safe-area-inset-bottom) + 6px);z-index:8;font-size:10px;font-weight:800;color:var(--ink);text-decoration:none;background:rgba(255,246,226,.92);border:2px solid var(--ink);border-radius:9px;padding:2px 7px;line-height:1.3;text-align:center}
+#stage.planning .thanks{bottom:auto;top:calc(env(safe-area-inset-top) + 64px)}
+#stage.planning #snd.hint::after{display:none}
 .thanks small{display:block;font-size:8px;font-weight:500;letter-spacing:.08em}
 .thanks:focus-visible{outline:3px solid var(--green);outline-offset:2px}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
@@ -164,7 +166,7 @@ button{font-family:var(--font);color:var(--ink)}
 <div class="layer" id="title">
   <div class="logo"><span class="outline">わらびーの</span><br><b class="outline">草刈りバイソン</b></div>
   <div class="btns"><button class="btn" id="start">はじめる</button></div>
-  <div class="ver">Ver.7.3</div>
+  <div class="ver">Ver.7.4</div>
 </div>
 
 <div class="layer" id="intro" hidden>
@@ -184,7 +186,7 @@ button{font-family:var(--font);color:var(--ink)}
 
 <div class="layer" id="plan" hidden>
   <div class="phead"><span class="outline">作戦会議</span><div class="ptime" id="ptime">1:00</div></div>
-  <div class="pnote">マップのエリアをタップすると説明が出るよ</div>
+  <div class="pnote">エリアをタップすると説明が出るよ</div>
   <div class="pcd" id="pcd"></div>
   <div class="card pcard" id="pcard">
     <div class="ptabs" role="tablist"><button class="on" data-t="area">エリア</button><button data-t="up">強化と設備</button><button data-t="tips">作戦のコツ</button></div>
@@ -980,7 +982,7 @@ function hud(dt){shownMoney+=(G.money-shownMoney)*Math.min(1,dt*10);$('money').t
  else{we.textContent=(G.bossPending?'さいごのWAVE まで ':'WAVE '+(W.n+1)+'/'+LASTW+' まで ')+fmt(Math.max(0,W.t));we.classList.toggle('hot',W.t<warnT())}
  const b=G.boss;$('bossw').hidden=!(b&&!b.dead);if(b)$('bossbar').style.width=Math.max(0,b.hp/b.max*100)+'%'}
 function stats(arr){return arr.map(([a,b])=>`<span>${a}</span><b>${b}</b>`).join('')}
-function show(id){['title','intro','plan','cont','pmenu','over','clear'].forEach(k=>$(k).hidden=k!=id);$('hud').hidden=!(id==null||id=='pmenu')}
+function show(id){$('stage').classList.toggle('planning',id=='plan');['title','intro','plan','cont','pmenu','over','clear'].forEach(k=>$(k).hidden=k!=id);$('hud').hidden=!(id==null||id=='pmenu')}
 function showClear(){clearSave();S.win();const st=[true,G.house.hp>=G.house.max*.5,G.faints==0];
  $('stars').innerHTML=st.map(s=>s?'<i>★</i>':'★').join('');
  $('stats').innerHTML=stats([['クリアタイム',fmt(G.t)],['家の体力',Math.round(G.house.hp/G.house.max*100)+'%'+(st[1]?'':'(50%以上で★)')],['たおれた回数',G.faints+'回'+(st[2]?'':'(0回で★)')],['しのいだWAVE',G.wave.cleared+'回'],['直した柵',G.fixN+'か所'],['たおしたバイソン',G.kills+'頭'],['かせいだお金','¥'+Math.round(G.earned)]]);
