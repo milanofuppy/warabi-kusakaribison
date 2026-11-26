@@ -94,7 +94,28 @@ button{font-family:var(--font);color:var(--ink)}
 .stars i{font-style:normal;color:#FFD84A}
 .tip{font-size:12px!important;color:#7A5E44}
 .ver{position:absolute;left:10px;bottom:8px;font-size:10px;font-weight:800;background:rgba(255,246,226,.9);border:2px solid var(--ink);border-radius:9px;padding:1px 7px}
-#saver{z-index:10}#gallery{z-index:9}
+#saver{z-index:10}#gallery{z-index:9}#recs{z-index:8}
+.clockw{position:absolute;right:10px;top:calc(env(safe-area-inset-top) + 62px);display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+#clock{background:var(--cream);border:2.5px solid var(--ink);border-radius:999px;box-shadow:0 2px 0 var(--ink);padding:1px 10px;font-weight:900;font-size:14px;font-variant-numeric:tabular-nums;min-width:52px;text-align:center}
+#lap{border:2.5px solid var(--ink);border-radius:999px;padding:1px 8px;font-weight:900;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums;box-shadow:0 2px 0 var(--ink);position:relative}
+#lap.neu{background:var(--cream)}
+#lap.bad{background:#E2483A;color:#FFF6E2;animation:lapbad .45s ease-in-out 4 alternate}
+#lap.good{background:#7EE07A;color:#173E14;animation:lapgood 1.6s ease-in-out infinite;overflow:hidden}
+#lap.good::after{content:"";position:absolute;inset:-2px;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%);transform:translateX(-120%);animation:shine 1.6s ease-in-out infinite}
+#lap.in{animation-name:lapin}
+@keyframes lapbad{to{transform:translateX(-3px) scale(1.06)}}
+@keyframes lapgood{50%{box-shadow:0 0 10px 3px rgba(190,255,150,.9),0 2px 0 var(--ink)}}
+@keyframes shine{60%,100%{transform:translateX(120%)}}
+.recs h2{margin-bottom:8px}
+.rsec{font-size:13px;font-weight:900;text-align:left;margin:4px 0 4px;color:var(--deep)}
+.rbest{background:#FFF1B8;border:2px solid var(--ink);border-radius:14px;padding:8px 12px;margin:0 0 12px;text-align:left;font-size:13px;font-weight:800;line-height:1.6}
+.rbest b{font-size:22px;font-variant-numeric:tabular-nums;display:block}
+.rnone{font-size:12px;font-weight:700;color:#7A5E44;margin:0 0 12px;text-align:left}
+.rlist{border:2px solid var(--ink);border-radius:14px;background:#FFFDF6;margin:0 0 8px;overflow:auto}
+.rlist.open{max-height:220px}
+.rrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:5px 10px;font-size:12px;font-weight:800;border-bottom:1.5px dashed #D9C9A8;text-align:left;font-variant-numeric:tabular-nums}
+.rrow:last-child{border-bottom:0}.rrow.top{background:#FFF1B8}.rrow i{font-style:normal;color:#B98A00}
+.rmore{width:100%;font-size:13px;padding:6px;margin:0 0 12px}
 .card.wide{width:min(100%,350px);max-height:94%;overflow:auto}
 .shot{border:2px solid var(--ink);border-radius:14px;margin:0 0 10px;overflow:hidden;background:#fff repeating-conic-gradient(#EDE3CF 0 25%,#fff 0 50%) 0 0/18px 18px}
 .shot img,.ggrid img{-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}
@@ -156,6 +177,7 @@ button{font-family:var(--font);color:var(--ink)}
     </div>
     <button class="round" id="pause" aria-label="メニュー"><svg viewBox="0 0 24 24" fill="#3A2A1E"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg></button>
   </div>
+  <div class="clockw"><div id="clock" aria-label="経過時間">0:00</div><div id="lap" hidden></div></div>
   <div id="mis"><b>1</b><span id="mist">草を刈ろう</span><em id="misn"></em></div>
 </div>
 <button class="round hint" id="snd" aria-label="音のオンオフ"><svg class="off" viewBox="0 0 24 24" fill="#3A2A1E" stroke="#3A2A1E" stroke-width="2" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6" fill="none" stroke-linecap="round"/></svg><svg class="on" viewBox="0 0 24 24" fill="#3A2A1E" stroke="#3A2A1E" stroke-width="2" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke-linecap="round"/></svg></button>
@@ -165,8 +187,8 @@ button{font-family:var(--font);color:var(--ink)}
 
 <div class="layer" id="title">
   <div class="logo"><span class="outline">わらびーの</span><br><b class="outline">草刈りバイソン</b></div>
-  <div class="btns"><button class="btn" id="start">はじめる</button></div>
-  <div class="ver">Ver.7.4</div>
+  <div class="btns"><button class="btn" id="start">はじめる</button><button class="btn sub" id="recbtn">記録</button></div>
+  <div class="ver">Ver.7.5</div>
 </div>
 
 <div class="layer" id="intro" hidden>
@@ -202,6 +224,11 @@ button{font-family:var(--font);color:var(--ink)}
 
 <div class="layer dim" id="clear" hidden><div class="card win"><img class="face" id="cface" alt=""><h2>村を守りきった!</h2><div class="stars" id="stars"></div><div class="stats" id="stats"></div><div class="btns"><button class="btn" id="reward">ごほうびを見る</button><button class="btn sub" id="again">もう一回あそぶ</button><button class="btn sub" id="ctitle">タイトルへ</button></div></div></div>
 
+<div class="layer dim" id="recs" hidden><div class="card wide recs"><h2>記録</h2>
+<div class="stats" id="rstats"></div>
+<div class="rsec">最速記録</div><div id="rbest"></div>
+<div class="rsec">クリアの記録</div><div class="rlist" id="rlist"></div><button class="btn sub rmore" id="rmore" hidden>さらに見る</button>
+<div class="btns"><button class="btn" id="rrew" hidden>ごほうびを見る</button><button class="btn sub" id="rclose">とじる</button></div></div></div>
 <div class="layer dim" id="gallery" hidden><div class="card wide"><h2>クリアのごほうび</h2><p>タップすると大きく表示して保存できるよ</p><div class="ggrid" id="ggrid"></div><div class="btns"><button class="btn" id="gall">まとめて写真に保存</button><button class="btn sub" id="gclose">とじる</button></div></div></div>
 <div class="layer dim" id="saver" hidden><div class="card wide"><h2 id="svtitle">写真に保存</h2><div class="shot"><img id="svimg" alt=""></div><p class="tip" id="svtip">「写真に保存」で写真アプリに入るよ。うまくいかない時は、画像を長押しして「"写真"に保存」</p><div class="btns"><button class="btn" id="svsave">写真に保存</button><button class="btn sub" id="svclose">とじる</button></div></div></div>
 </div>
@@ -563,7 +590,7 @@ function startWave(){const W=G.wave;W.n++;W.active=true;W.spT=0;W.at=0;let q=[];
  else banner('WAVE '+n,'バイソン'+q.length+'頭が'+SIDEN[W.side]+(W.side2>=0?'と'+SIDEN[W.side2]:'')+'から!');
  W.q=q;S.horn();G.shake=.3}
 function nextSides(){const W=G.wave;W.side=Math.random()*4|0;W.side2=W.n+1>=3?(W.side+1+(Math.random()*3|0))%4:-1}
-function endWave(){const W=G.wave;W.active=false;W.boss=false;W.cleared++;const bonus=20+W.n*15;G.money+=bonus;G.earned+=bonus;S.win();banner('撃退成功!','ボーナス +¥'+bonus);
+function endWave(){const W=G.wave;W.active=false;W.boss=false;W.cleared++;if(G.laps){G.laps[W.n]=G.t;lapShow(W.n)}const bonus=20+W.n*15;G.money+=bonus;G.earned+=bonus;S.win();banner('撃退成功!','ボーナス +¥'+bonus);
  W.t=Math.max(30,46-W.n*1.6);nextSides();W.warned=0;if(W.n+1>=LASTW)G.bossPending=true}
 function killBison(b){b.dead=.01;G.kills++;S.hit();G.shake=b.type=='boss'?1:.14;G.hs=b.type=='boss'?.35:.05;const n=BT[b.type].drop;
  let bx=b.x,by=b.y;if(!okT(bx,by)){bx=b.fs.cx-b.fs.nx*44;by=b.fs.cy-b.fs.ny*44}
@@ -976,18 +1003,18 @@ function guide(){const p=G.p;if(p.dead>0)return null;const gr=G.grill;
 
 /* ================= HUD / flow ================= */
 let shownMoney=0;
-function hud(dt){shownMoney+=(G.money-shownMoney)*Math.min(1,dt*10);$('money').textContent=Math.round(shownMoney);
+function hud(dt){$('clock').textContent=fmt(G.t);shownMoney+=(G.money-shownMoney)*Math.min(1,dt*10);$('money').textContent=Math.round(shownMoney);
  $('hpbar').style.width=Math.max(0,G.house.hp/G.house.max*100)+'%';const W=G.wave,we=$('wave');
  if(W.active){const left=W.q.length+G.bis.filter(b=>!b.dead).length;we.textContent=(W.boss?'女王戦':'WAVE '+W.n+'/'+LASTW)+' のこり'+left+'頭';we.classList.add('hot')}
  else{we.textContent=(G.bossPending?'さいごのWAVE まで ':'WAVE '+(W.n+1)+'/'+LASTW+' まで ')+fmt(Math.max(0,W.t));we.classList.toggle('hot',W.t<warnT())}
  const b=G.boss;$('bossw').hidden=!(b&&!b.dead);if(b)$('bossbar').style.width=Math.max(0,b.hp/b.max*100)+'%'}
 function stats(arr){return arr.map(([a,b])=>`<span>${a}</span><b>${b}</b>`).join('')}
 function show(id){$('stage').classList.toggle('planning',id=='plan');['title','intro','plan','cont','pmenu','over','clear'].forEach(k=>$(k).hidden=k!=id);$('hud').hidden=!(id==null||id=='pmenu')}
-function showClear(){clearSave();S.win();const st=[true,G.house.hp>=G.house.max*.5,G.faints==0];
+function showClear(){clearSave();S.win();const rc=recClear();const st=[true,G.house.hp>=G.house.max*.5,G.faints==0];
  $('stars').innerHTML=st.map(s=>s?'<i>★</i>':'★').join('');
- $('stats').innerHTML=stats([['クリアタイム',fmt(G.t)],['家の体力',Math.round(G.house.hp/G.house.max*100)+'%'+(st[1]?'':'(50%以上で★)')],['たおれた回数',G.faints+'回'+(st[2]?'':'(0回で★)')],['しのいだWAVE',G.wave.cleared+'回'],['直した柵',G.fixN+'か所'],['たおしたバイソン',G.kills+'頭'],['かせいだお金','¥'+Math.round(G.earned)]]);
+ $('stats').innerHTML=stats([['クリアタイム',fmtT(G.t)],rc.nb?['自己ベスト',rc.diff==null?'はじめての記録!':'更新! '+fmtDiff(rc.diff)]:['ベストとの差',fmtDiff(rc.diff)],['家の体力',Math.round(G.house.hp/G.house.max*100)+'%'+(st[1]?'':'(50%以上で★)')],['たおれた回数',G.faints+'回'+(st[2]?'':'(0回で★)')],['しのいだWAVE',G.wave.cleared+'回'],['直した柵',G.fixN+'か所'],['たおしたバイソン',G.kills+'頭'],['かせいだお金','¥'+Math.round(G.earned)]]);
  show('clear')}
-function gameOver(){clearSave();lastShot=snapGame();$('ostats').innerHTML=stats([['たどりついたWAVE',G.wave.n],['プレイ時間',fmt(G.t)],['たおしたバイソン',G.kills+'頭']]);
+function gameOver(){recFlush();clearSave();lastShot=snapGame();$('ostats').innerHTML=stats([['たどりついたWAVE',G.wave.n],['プレイ時間',fmt(G.t)],['たおしたバイソン',G.kills+'頭']]);
  const tips=['柵が壊される前に、柵の内側から草刈り機で攻撃できる','壊れた柵は襲来の合間に修理。石垣にすると一気に固くなる','物見櫓があると柵の外のバイソンが見えて、襲来も早く分かる','突進バイソンは赤い線から横にずれてよけよう','番犬りょーは中に入ったバイソンに飛びかかる','討伐の塔は家の近くに。壊れたら近くに立って修理'];$('tip').textContent='ヒント:'+pick(tips);
  show('over')}
 /* ---- photos ---- */
@@ -1035,15 +1062,48 @@ $('reward').onclick=()=>{S.click();openGallery()};$('gclose').onclick=()=>{S.cli
 $('gall').onclick=async()=>{S.click();const fs=(galFiles||[]).filter(Boolean);if(!(await shareFiles(fs))){toast('ここからは まとめて保存できないみたい。1枚ずつ長押しで保存してね',3.5)}};
 /* ---- save ---- */
 const SKEY='wara-kusakari-bison-save';
-function saveGame(){if(!G||G.state!='play')return;try{const W=G.wave,d={t:G.t,money:G.money,earned:G.earned,unl:[...G.unl],grow:Array.from(G.grow,v=>Math.round(v*50)),done:[...G.done],pay:G.pay,wallLv:G.wallLv,perk:G.perk,
+function saveGame(){if(G&&G.state=='play')recFlush();if(!G||G.state!='play')return;try{const W=G.wave,d={t:G.t,money:G.money,earned:G.earned,unl:[...G.unl],grow:Array.from(G.grow,v=>Math.round(v*50)),done:[...G.done],pay:G.pay,wallLv:G.wallLv,perk:G.perk,
  fence:G.fence.map(f=>[f.key,Math.round(f.hp),f.broken?1:0]),towers:G.towers.map(t=>[t.kind,t.x,t.y,Math.round(t.hp),t.max,t.broken?1:0]),helpers:G.helpers.map(h=>[h.k,h.sp,h.x|0,h.y|0]),dog:G.dog?[G.dog.x|0,G.dog.y|0]:null,
  house:G.house.hp,shops:[G.cg,G.cm].map(c=>[c.stock,c.pile,c.cashier?1:0,c.built?1:0]),grill:[G.grill.built?1:0,G.grill.inp,G.grill.out,G.grill.lv],clinic:G.clinic.built?1:0,
  wave:{n:W.n,t:W.t,active:W.active,q:W.q,side:W.side,side2:W.side2,cleared:W.cleared,warned:W.warned,boss:W.boss},c:[G.kills,G.cutN,G.hardN,G.soldG,G.soldY,G.faints,G.fixN],
  bossPending:G.bossPending,cutLv:G.cutLv,bagLv:G.bagLv,ms:G.ms,flags:G.flags,p:[G.p.x|0,G.p.y|0,Math.max(1,Math.round(G.p.hp)),G.p.stack.join('')],
- bis:G.bis.filter(b=>!b.dead).map(b=>[b.type,b.name,b.x|0,b.y|0,Math.round(b.hp),b.max,b.out?1:0,b.fs?b.fs.key:'']),drops:G.drops.map(m=>[m.x|0,m.y|0]),at:Date.now()};
+ bis:G.bis.filter(b=>!b.dead).map(b=>[b.type,b.name,b.x|0,b.y|0,Math.round(b.hp),b.max,b.out?1:0,b.fs?b.fs.key:'']),drops:G.drops.map(m=>[m.x|0,m.y|0]),laps:(G.laps||[]).map(v=>v==null?null:r1(v)),at:Date.now()};
  localStorage.setItem(SKEY,JSON.stringify(d))}catch(e){}}
 function getSave(){try{return JSON.parse(localStorage.getItem(SKEY)||'null')}catch(e){return null}}
 function clearSave(){try{localStorage.removeItem(SKEY)}catch(e){}}
+/* ---- records ---- */
+const RKEY='wara-kusakari-bison-rec';
+function recGet(){try{const r=JSON.parse(localStorage.getItem(RKEY)||'null');if(r&&r.v==1)return r}catch(e){}return{v:1,playT:0,tries:0,clears:0,kills:0,inc:0,best:null,hist:[]}}
+let REC=recGet();
+function recPut(){try{localStorage.setItem(RKEY,JSON.stringify(REC))}catch(e){}}
+function recFlush(){if(!G||G.fT==null)return;const dt=G.t-G.fT,dk=G.kills-G.fK,de=G.earned-G.fE;if(dt<=0&&dk<=0&&de<=0)return;
+ REC.playT+=Math.max(0,dt);REC.kills+=Math.max(0,dk);REC.inc+=Math.max(0,de);G.fT=G.t;G.fK=G.kills;G.fE=G.earned;recPut()}
+function recStart(){G.fT=G.t;G.fK=G.kills;G.fE=G.earned;G.laps=[];REC.tries++;recPut();lapShow(null)}
+const r1=v=>Math.round(v*10)/10;
+const fmtT=s=>Math.floor(s/60)+':'+(s%60).toFixed(1).padStart(4,'0');
+const fmtH=s=>{s=Math.floor(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?h+'時間'+m+'分':m+'分'+x+'秒'};
+const fmtD=ms=>{const d=new Date(ms),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'/'+z(d.getMonth()+1)+'/'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes())};
+const fmtDiff=d=>(d>0?'+':'−')+Math.abs(d).toFixed(1)+'秒';
+function lapShow(n){const e=$('lap');if(n==null){e.hidden=true;return}const t=G.laps[n],b=REC.best&&REC.best.laps&&REC.best.laps[n];
+ e.hidden=false;e.className='';void e.offsetWidth;
+ if(b==null){e.textContent='W'+n+' '+fmt(t);e.className='neu'}
+ else{const d=t-b;if(d<0){e.textContent='✦W'+n+' '+fmtDiff(d);e.className='good';S.coin()}else{e.textContent='⚠W'+n+' '+fmtDiff(d);e.className='bad'}}}
+function recClear(){recFlush();const t=r1(G.t),prev=REC.best;G.laps[LASTW]=G.t;
+ REC.clears++;REC.hist.push({d:Date.now(),t,inc:Math.round(G.earned)});if(REC.hist.length>3000)REC.hist.splice(0,REC.hist.length-3000);
+ const nb=!prev||t<prev.t;if(nb)REC.best={d:Date.now(),t,inc:Math.round(G.earned),laps:G.laps.map(v=>v==null?null:r1(v))};recPut();
+ return{nb,diff:prev?t-prev.t:null}}
+let recAll=false;
+function openRecs(){S.click();REC=recGet();const rate=REC.tries?(REC.clears/REC.tries*100).toFixed(1)+'%':'-';
+ $('rstats').innerHTML=stats([['総プレイ時間',fmtH(REC.playT)],['チャレンジ回数',REC.tries+'回'],['クリア回数',REC.clears+'回'],['クリア率',rate],['たおしたバイソン',REC.kills+'頭'],['総収入','¥'+Math.round(REC.inc).toLocaleString()]]);
+ const b=REC.best;$('rbest').innerHTML=b?`<div class="rbest"><b>${fmtT(b.t)}</b>${fmtD(b.d)} ・ 収入 ¥${b.inc.toLocaleString()}</div>`:'<p class="rnone">まだクリアしていないよ</p>';
+ recAll=false;recList();$('rrew').hidden=!(REC.clears>0);$('recs').hidden=false}
+function recList(){const h=REC.hist.slice().reverse(),l=$('rlist'),bt=REC.best;const show=recAll?h:h.slice(0,10);
+ l.innerHTML=show.length?show.map(r=>{const top=bt&&r.t==bt.t&&r.d==bt.d;return`<div class="rrow${top?' top':''}"><span>${top?'<i>★</i> ':''}${fmtD(r.d)}</span><b>${fmtT(r.t)}</b><span>¥${r.inc.toLocaleString()}</span></div>`}).join(''):'<div class="rrow"><span>クリアするとここに残るよ</span></div>';
+ l.classList.toggle('open',recAll);$('rmore').hidden=recAll||h.length<=10;l.hidden=false}
+$('recbtn').onclick=openRecs;$('rclose').onclick=()=>{S.click();$('recs').hidden=true};
+$('rmore').onclick=()=>{S.click();recAll=true;recList();$('rlist').scrollTop=0};
+$('rrew').onclick=()=>{S.click();openGallery()};
+
 function loadGame(d){init();Object.assign(G,{t:d.t,money:d.money,earned:d.earned,unl:new Set(d.unl),done:new Set(d.done),pay:d.pay||{},wallLv:d.wallLv,perk:d.perk||{},bossPending:d.bossPending,cutLv:d.cutLv,bagLv:d.bagLv,ms:d.ms,flags:d.flags||{}});
  [G.kills,G.cutN,G.hardN,G.soldG,G.soldY,G.faints,G.fixN]=d.c;
  [G.cg,G.cm].forEach((c,i)=>{const a=d.shops[i];c.stock=a[0];c.pile=a[1];c.cashier=!!a[2];c.built=!!a[3]});
@@ -1057,7 +1117,8 @@ function loadGame(d){init();Object.assign(G,{t:d.t,money:d.money,earned:d.earned
  const P=G.p;P.x=d.p[0];P.y=d.p[1];P.hp=d.p[2];P.stack=d.p[3]?d.p[3].split(''):[];if(!okPos(P.x,P.y,8)){P.x=HOME.x;P.y=HOME.y+30}
  const mw=muted;muted=true;for(const a of d.bis){const b=spawnBison(a[0],0);if(!b)continue;b.name=a[1];b.x=a[2];b.y=a[3];b.hp=a[4];b.max=a[5];b.out=!!a[6];b.fs=G.fence.find(f=>f.key==a[7])||pickSeg(b.fs.s,b.x,b.y)||b.fs}muted=mw;
  G.drops=d.drops.map(([x,y])=>({x,y,vx:0,vy:0,z:0,vz:0,t:1,claim:null}));
- G.solids=buildSolids();G.cam={x:P.x,y:P.y};updMission(true)}
+ G.solids=buildSolids();G.cam={x:P.x,y:P.y};updMission(true);
+ G.laps=d.laps||[];G.fT=G.t;G.fK=G.kills;G.fE=G.earned;const ln=G.laps.length-1;lapShow(ln>0&&G.laps[ln]!=null?ln:null)}
 addEventListener('pagehide',saveGame);document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame()});
 function setPause(v){paused=v;show(v?'pmenu':null);joy=null}
 let last=0;
@@ -1125,9 +1186,9 @@ function planTick(dt){if(planT<0)return;planT-=dt;const sec=Math.ceil(Math.max(0
  if(planT<=0){planT=-1;startBattle()}}
 function startBattle(){S.taikoGo();begin()}
 $('pgo').onclick=()=>{if(G.state=='plan')startBattle()};
-function begin(){planT=-1;$('pcd').textContent='';S.click();$('saver').hidden=true;$('gallery').hidden=true;$('snd').classList.remove('hint');init();shownMoney=0;paused=false;mus.mood='calm';mus.step=0;show(null);clearSave();toast('WAVEは全部で'+LASTW+'回!草を刈って備えよう',3.4)}
-function toTitle(){planT=-1;if(G&&G.state=='play')saveGame();S.click();$('saver').hidden=true;$('gallery').hidden=true;init();G.state='title';paused=false;$('toast').classList.remove('on');show('title')}
-$('start').onclick=()=>{S.click();const d=getSave();if(d&&d.wave){$('continfo').textContent='WAVE '+(d.wave.n)+'/'+LASTW+' ・ プレイ時間 '+fmt(d.t)+' ・ ¥'+Math.round(d.money);show('cont')}else{show('intro');G.state='intro'}};
+function begin(){recFlush();$('recs').hidden=true;planT=-1;$('pcd').textContent='';S.click();$('saver').hidden=true;$('gallery').hidden=true;$('snd').classList.remove('hint');init();shownMoney=0;paused=false;mus.mood='calm';mus.step=0;show(null);clearSave();recStart();toast('WAVEは全部で'+LASTW+'回!草を刈って備えよう',3.4)}
+function toTitle(){recFlush();planT=-1;if(G&&G.state=='play')saveGame();S.click();$('saver').hidden=true;$('gallery').hidden=true;init();G.state='title';paused=false;$('toast').classList.remove('on');show('title')}
+$('start').onclick=()=>{S.click();$('recs').hidden=true;const d=getSave();if(d&&d.wave){$('continfo').textContent='WAVE '+(d.wave.n)+'/'+LASTW+' ・ プレイ時間 '+fmt(d.t)+' ・ ¥'+Math.round(d.money);show('cont')}else{show('intro');G.state='intro'}};
 $('cnew').onclick=()=>{S.click();clearSave();show('intro');G.state='intro'};
 $('cgo').onclick=()=>{S.click();const d=getSave();$('snd').classList.remove('hint');$('saver').hidden=true;$('gallery').hidden=true;try{loadGame(d)}catch(e){clearSave();init()}shownMoney=G.money;paused=false;mus.mood='calm';mus.step=0;show(null);toast('つづきから再開!',2.2)};
 $('go').onclick=showPlan;$('retry').onclick=begin;$('again').onclick=begin;$('restart').onclick=begin;
