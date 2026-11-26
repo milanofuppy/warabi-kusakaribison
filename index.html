@@ -160,7 +160,7 @@ button{font-family:var(--font);color:var(--ink)}
 <div class="layer" id="title">
   <div class="logo"><span class="outline">わらびーの</span><br><b class="outline">草刈りバイソン</b></div>
   <div class="btns"><button class="btn" id="start">はじめる</button></div>
-  <div class="ver">Ver.7.1</div>
+  <div class="ver">Ver.7.2</div>
 </div>
 
 <div class="layer" id="intro" hidden>
@@ -179,7 +179,7 @@ button{font-family:var(--font);color:var(--ink)}
 </div>
 
 <div class="layer" id="plan" hidden>
-  <div class="phead"><span class="outline">作戦会議</span><div class="ptime" id="ptime">0:45</div></div>
+  <div class="phead"><span class="outline">作戦会議</span><div class="ptime" id="ptime">1:00</div></div>
   <div class="pnote">マップのエリアをタップすると説明が出るよ</div>
   <div class="pcd" id="pcd"></div>
   <div class="card pcard" id="pcard">
@@ -777,7 +777,7 @@ function drawShop(c){const x=c.x,y=c.y;shadow(x+22,y+c.h,42);
  if(c.cashier)sprite(c.k=='g'?IMG.clerk:IMG.c_pepef,null,x+22,y+c.h+30,c.k=='g'?50:44,1,0);
  c.cust.forEach((u,i)=>{customer(u,u.d>3?u.anim*10:G.t*2+i);if(i==0&&u.got>0&&u.d<3)tag(u.got+'/'+u.need,u.x+24,u.y-52,10)});
  for(const l of c.leave){customer(l,l.anim*10);item(c.k,l.x+10,l.y-18,.8)}}
-function customer(u,bob){const b=Math.abs(Math.sin(bob))*3;shadow(u.x,u.y,13);sprite(IMG[u.im],null,u.x,u.y-b,u.im=='c_toxi'||u.im=='c_pepelove'?40:46,u.dir>0?-1:1,0)}
+function customer(u,bob){const b=Math.abs(Math.sin(bob))*3;shadow(u.x,u.y,13);sprite(IMG[u.im],null,u.x,u.y-b,u.im=='c_toxi'||u.im=='c_pepelove'?40:46,(u.dir>0?-1:1)*(u.im=='c_peperun'?-1:1),0)}
 function drawPile(c){const n=Math.min(Math.ceil(c.pile/(c.k=='g'?2:7)),48);if(!n){ctx.globalAlpha=.5;rr(c.px-26,c.py-10,52,24,6);ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1}
  for(let i=0;i<n;i++){const col=i%4;item('$',c.px-12+(col%2)*24,c.py+6-(col>>1)*8-((i/4)|0)*5)}}
 function drawGrill(g){const x=g.x,y=g.y;shadow(x+g.w/2,y+g.h+4,52);
@@ -1062,7 +1062,7 @@ function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
  draw();if(G.state=='play')hud(dt);requestAnimationFrame(loop)}
 
 /* ================= 作戦会議 ================= */
-const PLAN_T=45;let planT=-1,planSel=0,planTab='area',PV={z:.3,cx:1000,cy:1100},planLastSec=99;
+const PLAN_T=60;let planT=-1,planSel=0,planTab='area',PV={z:.3,cx:1000,cy:1100},planLastSec=99;
 const RINFO=[
  {sub:'スタート地点',feat:['家と草屋がある村のまんなか','ふつうの草ばかり。草刈り機を強化するとススキ(Lv2)・竹(Lv3)も刈れる'],build:['草屋・焼肉屋の店員','焼き台と焼肉屋','討伐の塔・物見櫓','救護所・番犬りょー','柵の強化(石垣→鉄の柵)']},
  {feat:['草が2倍の速さで生える','ここの草は刈ると1つ多くとれる','お金をかせぐためのエリア'],build:['草刈り助っ人 2・3','討伐の塔・物見櫓','開くと家の近くにも:肉の回収係・焼肉の運び係・強火の焼き台・草刈り機Lv3・特大カゴ']},
